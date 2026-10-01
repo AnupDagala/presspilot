@@ -1,6 +1,6 @@
 {
   "measuredAt": "2026-10-01T17:44:03.558Z",
-  "scope": "Actual local application and deployment preparation. No cloud deployment or paid model calls.",
+  "scope": "Historical native verification on 1 October 2026. Docker was unavailable on that Windows machine. Subsequent Ubuntu CI evidence is recorded separately in evaluations/ci-verification.json.",
   "runtimes": {
     "go": "1.27.1",
     "node": "24.11.0",
@@ -160,6 +160,16 @@
     "tracing": "local console export and secret omission verified"
   },
   "unverified": [
+    "Live inference for OpenAI, Anthropic, xAI and open-weight endpoint (no credentials)",
+    "Actual Shopify development-store calls and deliveries (no credentials)",
+    "GCP deployment, cloud trace export and alert delivery (no authorization/credentials)",
+    "Joint PostgreSQL/Temporal cloud restore",
+    "Full worker/provider distributed tracing",
+    "Multi-version Temporal worker rollout"
+  ],
+  "startupCorrection": "Final browser run passed after correcting a manual sandbox environment-variable typo; the checked-in startup script already used the correct variable.",
+  "recoveryAuthorization": "Worker requester checks remain enforced. Administrator-only review is a separately authorized GraphQL operation and does not modify orders.",
+  "originalNativeUnverified": [
     "Docker image/Compose execution (no engine)",
     "Live inference for OpenAI, Anthropic, xAI and open-weight endpoint (no credentials)",
     "Actual Shopify development-store calls and deliveries (no credentials)",
@@ -169,6 +179,5 @@
     "Full worker/provider distributed tracing",
     "Multi-version Temporal worker rollout"
   ],
-  "startupCorrection": "Final browser run passed after correcting a manual sandbox environment-variable typo; the checked-in startup script already used the correct variable.",
-  "recoveryAuthorization": "Worker requester checks remain enforced. Administrator-only review is a separately authorized GraphQL operation and does not modify orders."
+  "ciEvidence": "evaluations/ci-verification.json"
 }

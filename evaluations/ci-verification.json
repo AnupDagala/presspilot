@@ -1,0 +1,379 @@
+{
+  "scope": "Immutable GitHub Actions evidence for named commits. New commits need their own completed workflow; this record does not imply success for a different HEAD.",
+  "reconciledOn": "2026-10-02",
+  "timezone": "Asia/Calcutta",
+  "inspectedLocalAndRemoteHead": "4100d86cb41c99e1b2e790427c88238e94ac8cd8",
+  "olderFailedRun": {
+    "url": "https://github.com/AnupDagala/presspilot/actions/runs/36903657921",
+    "runId": 36903657921,
+    "attempt": 2,
+    "testedCommit": "7e0622512c3eb8aee5955501d8310b79b61cdb50",
+    "conclusion": "failure",
+    "integrationJob": "https://github.com/AnupDagala/presspilot/actions/runs/36903657921/job/110529076413",
+    "jobDurationSeconds": 167,
+    "baselineDurationSeconds": 11,
+    "error": "gRPC Failed to connect before the deadline",
+    "skippedRequiredSteps": [
+      "Mocked provider and private authorization fixtures",
+      "Hard worker process recovery in both unpaid modes",
+      "Browser workflows against the containerized web gateway"
+    ],
+    "containerLogs": "The older workflow did not retain Temporal/worker container logs before teardown. Do not claim a captured permission-denied log."
+  },
+  "successfulRun": {
+    "conclusion": "success",
+    "runId": 36904644437,
+    "url": "https://github.com/AnupDagala/presspilot/actions/runs/36904644437",
+    "testedCommit": "4100d86cb41c99e1b2e790427c88238e94ac8cd8",
+    "jobs": [
+      {
+        "conclusion": "success",
+        "startedAt": "2026-10-01T18:08:51Z",
+        "url": "https://github.com/AnupDagala/presspilot/actions/runs/36904644437/job/110512010815",
+        "name": "infrastructure",
+        "id": 110512010815,
+        "status": "completed",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:08:52Z",
+            "completed_at": "2026-10-01T18:08:52Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:08:52Z",
+            "completed_at": "2026-10-01T18:08:53Z"
+          },
+          {
+            "name": "Run hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:08:53Z",
+            "completed_at": "2026-10-01T18:08:54Z"
+          },
+          {
+            "name": "Run terraform fmt -check && terraform init -backend=false && terraform validate",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:08:54Z",
+            "completed_at": "2026-10-01T18:08:57Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:08:57Z",
+            "completed_at": "2026-10-01T18:08:57Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:08:57Z",
+            "completed_at": "2026-10-01T18:08:57Z"
+          }
+        ],
+        "completedAt": "2026-10-01T18:09:02Z"
+      },
+      {
+        "conclusion": "success",
+        "startedAt": "2026-10-01T18:08:51Z",
+        "url": "https://github.com/AnupDagala/presspilot/actions/runs/36904644437/job/110512011098",
+        "name": "checks",
+        "id": 110512011098,
+        "status": "completed",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:08:52Z",
+            "completed_at": "2026-10-01T18:08:53Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:08:53Z",
+            "completed_at": "2026-10-01T18:08:54Z"
+          },
+          {
+            "name": "Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:08:54Z",
+            "completed_at": "2026-10-01T18:09:02Z"
+          },
+          {
+            "name": "Run actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:09:02Z",
+            "completed_at": "2026-10-01T18:09:18Z"
+          },
+          {
+            "name": "Run npm ci",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:09:18Z",
+            "completed_at": "2026-10-01T18:09:26Z"
+          },
+          {
+            "name": "Publication hygiene and redacted full-history scan",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:09:26Z",
+            "completed_at": "2026-10-01T18:09:27Z"
+          },
+          {
+            "name": "Formatting, lint, types, builds and offline contracts",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:09:27Z",
+            "completed_at": "2026-10-01T18:09:43Z"
+          },
+          {
+            "name": "Go formatting, build and vet",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:09:43Z",
+            "completed_at": "2026-10-01T18:09:45Z"
+          },
+          {
+            "name": "Dependency vulnerability checks",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:09:45Z",
+            "completed_at": "2026-10-01T18:09:49Z"
+          },
+          {
+            "name": "Post Run actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:09:49Z",
+            "completed_at": "2026-10-01T18:09:49Z"
+          },
+          {
+            "name": "Post Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:09:49Z",
+            "completed_at": "2026-10-01T18:09:49Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:09:49Z",
+            "completed_at": "2026-10-01T18:09:50Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:09:50Z",
+            "completed_at": "2026-10-01T18:09:50Z"
+          }
+        ],
+        "completedAt": "2026-10-01T18:11:06Z"
+      },
+      {
+        "conclusion": "success",
+        "startedAt": "2026-10-01T18:11:08Z",
+        "url": "https://github.com/AnupDagala/presspilot/actions/runs/36904644437/job/110512983937",
+        "name": "integration",
+        "id": 110512983937,
+        "status": "completed",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:11:09Z",
+            "completed_at": "2026-10-01T18:11:09Z"
+          },
+          {
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:11:09Z",
+            "completed_at": "2026-10-01T18:11:10Z"
+          },
+          {
+            "name": "Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:11:10Z",
+            "completed_at": "2026-10-01T18:11:16Z"
+          },
+          {
+            "name": "Run actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:11:16Z",
+            "completed_at": "2026-10-01T18:11:30Z"
+          },
+          {
+            "name": "Run npm ci && npm run build",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:11:30Z",
+            "completed_at": "2026-10-01T18:11:42Z"
+          },
+          {
+            "name": "Provision actual PostgreSQL, Temporal and application containers",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:11:42Z",
+            "completed_at": "2026-10-01T18:13:00Z"
+          },
+          {
+            "name": "Wait for API and web readiness",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:13:00Z",
+            "completed_at": "2026-10-01T18:13:02Z"
+          },
+          {
+            "name": "Remove prior checked-in reports from disposable runner checkout",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:13:02Z",
+            "completed_at": "2026-10-01T18:13:02Z"
+          },
+          {
+            "name": "PostgreSQL domain and security invariants",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:13:02Z",
+            "completed_at": "2026-10-01T18:13:10Z"
+          },
+          {
+            "name": "Actual PostgreSQL and Temporal baseline evaluations",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:13:10Z",
+            "completed_at": "2026-10-01T18:16:26Z"
+          },
+          {
+            "name": "Mocked provider and private authorization fixtures",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:16:26Z",
+            "completed_at": "2026-10-01T18:19:43Z"
+          },
+          {
+            "name": "Hard worker process recovery in both unpaid modes",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:19:43Z",
+            "completed_at": "2026-10-01T18:20:19Z"
+          },
+          {
+            "name": "Browser workflows against the containerized web gateway",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:20:19Z",
+            "completed_at": "2026-10-01T18:23:14Z"
+          },
+          {
+            "name": "Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:23:14Z",
+            "completed_at": "2026-10-01T18:23:14Z"
+          },
+          {
+            "name": "Stop disposable integration services",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:23:14Z",
+            "completed_at": "2026-10-01T18:23:26Z"
+          },
+          {
+            "name": "Post Run actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:23:26Z",
+            "completed_at": "2026-10-01T18:23:26Z"
+          },
+          {
+            "name": "Post Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:23:26Z",
+            "completed_at": "2026-10-01T18:23:26Z"
+          },
+          {
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:23:26Z",
+            "completed_at": "2026-10-01T18:23:27Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "started_at": "2026-10-01T18:23:27Z",
+            "completed_at": "2026-10-01T18:23:27Z"
+          }
+        ],
+        "completedAt": "2026-10-01T18:23:30Z"
+      }
+    ],
+    "status": "completed",
+    "updatedAt": "2026-10-01T18:23:31Z",
+    "createdAt": "2026-10-01T18:08:48Z",
+    "runAttempt": 1
+  },
+  "measuredResults": {
+    "baseline": {
+      "passed": 60,
+      "failed": 0,
+      "latencyMs": {
+        "p50": 1031,
+        "p95": 6195
+      }
+    },
+    "mockedPrivateFixtures": {
+      "passed": 60,
+      "failed": 0,
+      "latencyMs": {
+        "p50": 1034,
+        "p95": 6133
+      }
+    },
+    "browser": {
+      "passed": 6,
+      "durationSeconds": 28.2
+    },
+    "processRecovery": {
+      "baseline": {
+        "passed": true,
+        "businessEffects": 1,
+        "orderRetrievals": 1
+      },
+      "mocked": {
+        "passed": true,
+        "businessEffects": 1,
+        "orderRetrievals": 1
+      }
+    },
+    "paidModelCalls": 0
+  },
+  "configurationCorrection": "Commit 4100d86 moved Temporal SQLite persistence from /data to its owned /home/temporal volume and added Temporal/worker readiness checks. No authorization, grading assertions, tests, or failure gates were relaxed.",
+  "unverified": [
+    "Live provider inference and live-model evaluation",
+    "Actual Shopify development-store integration",
+    "Cloud deployment, cloud trace export and alert delivery",
+    "Joint cloud PostgreSQL/Temporal restoration",
+    "Multi-version worker rollout",
+    "Full worker/provider distributed tracing"
+  ],
+  "caveat": "Baseline and synthetic mocked results are system verification, not live-model benchmarks. Docker execution is verified on Ubuntu GitHub Actions, not on the original native Windows machine."
+}

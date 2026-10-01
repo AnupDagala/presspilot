@@ -2,6 +2,20 @@
 
 This file records measured results, not planned checks. Implementation date: 1 October 2026, Asia/Kolkata.
 
+## GitHub Actions reconciliation — 2 October 2026
+
+At reconciliation, local HEAD and remote `main` both matched `4100d86cb41c99e1b2e790427c88238e94ac8cd8`. [Workflow 36904644437](https://github.com/AnupDagala/presspilot/actions/runs/36904644437) tested that exact commit and completed successfully. Every job passed; baseline evaluations, mocked-provider/private-authorization checks, both hard worker-recovery modes and browser tests each have an explicit successful step conclusion. Docker execution is verified on the Ubuntu 24.04 GitHub-hosted runner, not on the original native Windows machine.
+
+The screenshot matches [attempt 2 of the older failed workflow 36903657921](https://github.com/AnupDagala/presspilot/actions/runs/36903657921/attempts/2), testing `7e0622512c3eb8aee5955501d8310b79b61cdb50`. Its integration job lasted **2m 47s**, baseline failed after **11s**, and mocked/recovery/browser steps were skipped. It was rerun after the successful workflow, but retained its older tested commit. Rerunning an old workflow does not test newly pushed HEAD. Its full logs confirm `Failed to connect before the deadline` from the Temporal gRPC client. The old workflow did not retain Temporal/worker container logs before teardown; no captured permission-denied message is claimed.
+
+The intervening fix moved Temporal's SQLite database from `/data` to the image user's owned `/home/temporal` volume, gated dependent services on Temporal health, and checked worker readiness. The successful successor built and exercised actual PostgreSQL, Temporal, API, worker and web containers. Authorization checks, grading assertions and failure gates were preserved. There is no `continue-on-error` or paid-provider CI path.
+
+That successful CI run measured **60/60 baseline**, **60/60 mocked private fixtures**, **six browser tests** (28.2 seconds), and one order retrieval/one business effect after each hard worker-process restart. Baseline p50/p95: **1,031/6,195 ms**; mocked p50/p95: **1,034/6,133 ms**. These are unpaid system/fixture checks, not live-model benchmarks or load benchmarks. [Machine-readable CI evidence](../evaluations/ci-verification.json) records tested commits, attempts, job/step conclusions and measurements. Newer commits require their own completed workflow; consult [Actions](https://github.com/AnupDagala/presspilot/actions) and compare its tested SHA with HEAD.
+
+Live provider inference, actual Shopify development-store integration, cloud deployment, cloud trace export and alert delivery remain unverified. No cloud resources or merchant actions were performed.
+
+## Historical native verification
+
 First vertical slice: actual PostgreSQL and Temporal; cancellation submission, evidence retrieval, persisted proposal, approval, atomic execution and audit. Initial tests exposed an integer/text SQL comparison and noncanonical nested JSON hashing. Both were fixed and regression-tested.
 
 The initial 60-case baseline run passed 59/60. Its failure was the evaluator attempting to switch a session after revoking that session's membership. The evaluator now switches to an authorized administrator before revocation; the backend still revalidates and rejects the revoked approver. The corrected full run passed **60/60** (40 development, 20 held-out, one trial each), median wall-clock **1,136 ms**, p95 **7,504 ms**. It includes 53 PostgreSQL/Temporal business/workflow scenarios and seven recorded provider contracts. No paid model calls or model tokens were used. This is baseline/system performance, not model performance.
@@ -20,6 +34,6 @@ Measured source reports: `evaluations/results-baseline.json`, `evaluations/resul
 
 Terraform 1.16.4 initialized the signed Google provider 7.46.1 and `terraform validate` passed. No Terraform plan/apply or cloud account mutation occurred. The Temporal container tag/digest was verified against its registry. Compose YAML/isolation checking is separate from Docker execution; no Docker engine was present.
 
-Final build/lint/security checks and any updated measurements are summarized in `evaluations/verification.json`. Read that artifact for the final exact statuses. Never treat skipped integration tests, static configuration validation, synthetic responses or missing credentials as live deployment verification.
+Native build/lint/security checks are summarized in `evaluations/verification.json`; subsequent GitHub Docker execution is recorded separately in `evaluations/ci-verification.json`. Never treat skipped integration tests, static configuration validation, synthetic responses or missing credentials as live deployment verification.
 
 The final manual restart initially used the wrong sandbox environment-variable name. Demo creation was correctly denied; the flag was corrected and all six browser checks passed. The documented startup script already uses the correct variable. Administrator recovery checks verify that requester revocation still denies worker escalation, only a current administrator can withdraw pending proposals, and an escalated case cannot execute a previous approval.

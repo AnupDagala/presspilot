@@ -47,7 +47,7 @@ docker compose up -d --build
 
 On Windows, omit `export`. The generator preserves existing credentials and writes private files under ignored `runtime/secrets` without printing values. Ports bind loopback. `docker compose down` stops services while retaining volumes; keep the volumes when their state is needed. Temporal's SQLite-backed development server is real and durable, but is not the production deployment.
 
-**Docker execution remains unverified in the recorded local-alpha results:** the implementation machine had no engine. Compose YAML/isolation checks passed. GitHub Actions provisions actual containers to verify this path; consult the corresponding run instead of assuming success from a workflow definition.
+The original native verification machine had no Docker engine. **Docker execution was subsequently verified in [Ubuntu CI run 36904644437](https://github.com/AnupDagala/presspilot/actions/runs/36904644437)** at commit `4100d86`: all source/infrastructure jobs, actual PostgreSQL/Temporal baseline evaluations, mocked authorization fixtures, hard worker recovery and browser tests passed. [Verification reconciliation](docs/VERIFICATION.md) distinguishes that successful commit from an older failed run that was rerun later. Compare a run's tested SHA with HEAD; a workflow definition or rerun of old code is not verification of a new commit.
 
 ### Native Windows
 
@@ -102,6 +102,6 @@ Native runners instead use the non-secret URL `postgres://presspilot@127.0.0.1:5
 
 [Demonstration guide](docs/DEMO.md), [known limitations](docs/LIMITATIONS.md), and [deployment/recovery runbook](docs/RUNBOOK.md) describe the next steps.
 
-Live provider inference, actual Shopify development-store integration, Docker execution in the recorded local results, and cloud deployment remain unverified. Shopify signature/inbox/read/reconciliation contracts are implemented; merchant writes are disabled. Terraform prepares private Cloud Run web/API, a continuous Temporal worker pool, Cloud SQL, Secret Manager references, traces and alerts. No cloud resources or merchant actions were performed.
+Live provider inference, actual Shopify development-store integration, and cloud deployment remain unverified. Docker execution passed on the Ubuntu CI runner; the original Windows machine still has no Docker engine. Shopify signature/inbox/read/reconciliation contracts are implemented; merchant writes are disabled. Terraform prepares private Cloud Run web/API, a continuous Temporal worker pool, Cloud SQL, Secret Manager references, traces and alerts. No cloud resources or merchant actions were performed.
 
-Next: verify containers in CI; run bounded live trials with approved credentials/budget; verify a Shopify development store; then review cloud deployment, IAM, restore/replay compatibility and alert delivery with explicit authorization. Private identity onboarding, retention cleanup, multi-version worker rollout and tracing across worker/provider activities require further work before operational use.
+Next: keep container verification passing for each changed commit; run bounded live trials with approved credentials/budget; verify a Shopify development store; then review cloud deployment, IAM, restore/replay compatibility and alert delivery with explicit authorization. Private identity onboarding, retention cleanup, multi-version worker rollout and tracing across worker/provider activities require further work before operational use.

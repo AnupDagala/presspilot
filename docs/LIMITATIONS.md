@@ -2,7 +2,7 @@
 
 - No live model credentials, paid trials, real provider usage or model benchmark claims. The mocked mode is a synthetic tool sequence rather than a replay of a paid model run.
 - No Shopify credentials or live API verification. Signed ingestion and read/reconciliation adapters are contract-tested. Merchant write operations, payment refunds/void handling and external action mapping are intentionally disabled/pending.
-- No paid GCP resources, public access changes or deployed customer service. Terraform validation is local preparation. Docker engine/container execution and Cloud Run/SQL/Secret Manager behavior remain unverified on this machine.
+- No paid GCP resources, public access changes or deployed customer service. Terraform validation is local preparation. Docker container execution passed in Ubuntu GitHub Actions at the commit recorded in `evaluations/ci-verification.json`; it remains unavailable on the native Windows machine. Cloud Run/SQL/Secret Manager runtime behavior remains unverified.
 - Private authentication uses operator-provisioned, expiring opaque sessions. SSO/OIDC, account recovery, invitation workflows and private role management are extension work. Sandbox role switching never grants access to private organizations.
 - GraphQL result snapshots are bounded JSON rather than fully typed field-projected result schemas. Mutation inputs and backend/tool domain contracts are typed.
 - Organization-level transaction locking favors straightforward correctness over parallel throughput. Approval polling has up to five seconds of intentional latency and creates bounded workflow history.
