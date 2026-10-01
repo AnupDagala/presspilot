@@ -1,0 +1,1 @@
+{"name":"@presspilot/worker","version":"0.1.0","private":true,"scripts":{"build":"tsc -p tsconfig.json","typecheck":"tsc --noEmit -p tsconfig.json","start":"node dist/worker.js"},"dependencies":{"@temporalio/activity":"latest","@temporalio/client":"latest","@temporalio/worker":"latest","@temporalio/workflow":"latest","zod":"latest"}}

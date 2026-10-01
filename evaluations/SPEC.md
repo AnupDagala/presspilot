@@ -1,0 +1,9 @@
+# Evaluation specification (defined before live prompt tuning)
+
+The dataset has 60 explicitly authored tasks: 40 development and 20 held-out. Expected answers and grading code are read only by the test runner. Workers receive customer requests and authoritative tools, never expected outcomes or split labels. The fixed prompts are not tuned against held-out outcomes. This small portfolio suite is not a statistically representative commerce benchmark.
+
+There are 50 business/security workflows and 10 system/provider contracts (including three Temporal retry/recovery tasks in the workflow partition; the harness reports the exact partition). Every business trial uses real PostgreSQL and Temporal and starts with an isolated fictional organization. Infrastructure failures are injected by the harness, not by customer text. Four provider contract tests use recorded API response envelopes and never make paid calls. Failure envelopes are tested separately.
+
+Objective grading queries the final database: order state and version; execution count; exact action and arguments; approval identity/binding; policy version; evidence snapshots; forbidden effects; correct escalation; stale proposal invalidation; observed retries. Browser tests independently exercise the operator and approver flows. Subjective explanation quality is not scored; a human may inspect the console and decision summaries.
+
+Report baseline workflows, recorded contracts, and optional live runs as separate categories. Include dataset/split, trials, exact configuration, measured wall-clock latency, usage availability, failure details and cost assumptions. Baseline latency includes durable approval polling. No model benchmark claims may be inferred from baseline pass rates. Live trials are opt-in, require a private authenticated test organization, enforce configured token/call budgets, and may be repeated only within explicit budget.

@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+runtime/
+test-results/
+playwright-report/
+*.exe
+*.log
+coverage/
+infra/*.tfstate*
+infra/*.tfplan
+infra/.terraform/

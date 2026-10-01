@@ -1,0 +1,15 @@
+{
+ "name":"presspilot","version":"0.1.0","private":true,
+ "workspaces":["apps/web","apps/worker"],
+ "scripts":{
+  "build":"npm run build --workspaces",
+  "typecheck":"npm run typecheck --workspaces",
+  "test":"tsx --test tests/*.test.ts",
+  "test:browser":"playwright test",
+  "eval":"tsx tests/evaluate.ts",
+  "format":"prettier --write apps/worker/src apps/web/src tests docs *.md *.json *.yml",
+  "format:check":"prettier --check apps/worker/src apps/web/src tests docs *.md *.json *.yml",
+  "scan":"node scripts/scan.mjs"
+ },
+ "devDependencies":{"@playwright/test":"latest","@types/node":"latest","prettier":"latest","tsx":"latest","typescript":"latest"}
+}
