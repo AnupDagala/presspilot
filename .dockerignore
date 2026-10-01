@@ -8,3 +8,16 @@ playwright-report
 work
 infra/.terraform
 **/*.tfstate*
+.tools
+backups
+private-data
+**/*.dump
+**/*.backup
+**/*.sqlite*
+**/*.db*
+**/*.pem
+**/*.key
+**/*.tfvars*
+**/*.tfplan
+**/credentials*.json
+**/service-account*.json

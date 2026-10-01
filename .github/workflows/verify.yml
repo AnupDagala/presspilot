@@ -65,11 +65,13 @@ jobs:
       - name: Wait for API and web readiness
         run: |
           for i in $(seq 1 90); do
-            if curl -fsS http://localhost:8080/healthz && curl -fsS http://localhost:5173/healthz; then exit 0; fi
+            if curl -fsS http://localhost:8080/healthz && curl -fsS http://localhost:5173/healthz && curl -fsS http://localhost:9090; then exit 0; fi
             sleep 2
           done
           docker compose ps
           exit 1
+      - name: Remove prior checked-in reports from disposable runner checkout
+        run: node --input-type=module -e "import {rmSync} from 'node:fs'; for (const name of ['results-baseline.json','results-mocked.json','recovery-process-baseline.json','recovery-process-mocked.json']) rmSync('evaluations/'+name,{force:true});"
       - name: PostgreSQL domain and security invariants
         working-directory: apps/api
         env:
@@ -95,7 +97,10 @@ jobs:
           retention-days: 7
       - name: Stop disposable integration services
         if: always()
-        run: docker compose down
+        run: |
+          docker compose ps
+          docker compose logs --no-color temporal worker
+          docker compose down
   infrastructure:
     runs-on: ubuntu-24.04
     timeout-minutes: 10

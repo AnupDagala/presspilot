@@ -22,10 +22,16 @@ services:
         "--ip",
         "0.0.0.0",
         "--db-filename",
-        "/data/temporal.db",
+        "/home/temporal/temporal.db",
       ]
     ports: ["127.0.0.1:7233:7233", "127.0.0.1:8233:8233"]
-    volumes: ["temporal-infrastructure:/data"]
+    volumes: ["temporal-infrastructure:/home/temporal"]
+    healthcheck:
+      test: ["CMD", "temporal", "operator", "cluster", "health"]
+      interval: 3s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
   api:
     user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
     build: { context: ., dockerfile: apps/api/Dockerfile }
@@ -39,7 +45,7 @@ services:
     ports: ["127.0.0.1:8080:8080"]
     depends_on:
       postgres: { condition: service_healthy }
-      temporal: { condition: service_started }
+      temporal: { condition: service_healthy }
     restart: unless-stopped
   worker:
     user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
@@ -50,7 +56,10 @@ services:
       TEMPORAL_ADDRESS: temporal:7233
       LIVE_MODEL_ENABLED: "false"
     secrets: [worker-secret]
-    depends_on: [api, temporal]
+    ports: ["127.0.0.1:9090:9090"]
+    depends_on:
+      api: { condition: service_started }
+      temporal: { condition: service_healthy }
     restart: unless-stopped
   web:
     user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"

@@ -9,4 +9,4 @@
 
 No paid provisioning, public deployment, or merchant actions are authorized.
 
-Public portfolio publication: verify GitHub account and target, review tracked source/history, strengthen exclusions, present the project as a local alpha, and run container-backed GitHub Actions. Account verified as AnupDagala; no existing presspilot repository or remote. Publication authorized by the user; cloud provisioning and merchant actions remain outside scope. Source/history secret scans passed; final push and CI verification are pending.
+Public portfolio publication: account verified as AnupDagala, source/history scans passed, and reviewed source published to the new public AnupDagala/presspilot repository. README presents a local alpha; credential/state exclusions and full-history CI scans are configured. The first container CI attempt exposed Temporal volume ownership/readiness; those configuration issues are being verified through the repository's Actions runs. Cloud provisioning and merchant actions remain outside scope.
