@@ -1,15 +1,40 @@
 {
- "name":"presspilot","version":"0.1.0","private":true,
- "workspaces":["apps/web","apps/worker"],
- "scripts":{
-  "build":"npm run build --workspaces",
-  "typecheck":"npm run typecheck --workspaces",
-  "test":"tsx --test tests/*.test.ts",
-  "test:browser":"playwright test",
-  "eval":"tsx tests/evaluate.ts",
-  "format":"prettier --write apps/worker/src apps/web/src tests docs *.md *.json *.yml",
-  "format:check":"prettier --check apps/worker/src apps/web/src tests docs *.md *.json *.yml",
-  "scan":"node scripts/scan.mjs"
- },
- "devDependencies":{"@playwright/test":"latest","@types/node":"latest","prettier":"latest","tsx":"latest","typescript":"latest"}
+  "name": "presspilot",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/web",
+    "apps/worker"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "typecheck": "npm run typecheck --workspaces && tsc --noEmit -p tsconfig.tests.json",
+    "test": "tsx --test tests/*.test.ts",
+    "test:browser": "playwright test",
+    "eval": "tsx tests/evaluate.ts",
+    "format": "prettier --write apps/worker/src apps/web/src tests docs *.md *.json *.yml",
+    "format:check": "prettier --check apps/worker/src apps/web/src tests docs *.md *.json *.yml",
+    "scan": "node scripts/scan.mjs",
+    "lint": "eslint apps/worker/src apps/web/src tests scripts apps/web/server.mjs",
+    "config:check": "node scripts/check-config.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.63.0",
+    "@types/node": "26.6.3",
+    "@types/pg": "8.23.1",
+    "eslint": "10.11.0",
+    "pg": "8.23.1",
+    "prettier": "3.9.9",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.0",
+    "yaml": "2.9.1"
+  },
+  "dependencies": {
+    "google-auth-library": "11.1.0"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  }
 }

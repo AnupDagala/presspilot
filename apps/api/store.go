@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	"strings"
 	"time"
 )
 
@@ -241,6 +242,9 @@ func (s *Store) Execute(ctx context.Context, org, pid string) (any, error) {
 		if err != nil {
 			return nil, err
 		}
+		if c.Status != "awaiting_approval" {
+			return Object{"status": "rejected", "reason": "Case is no longer awaiting approval"}, nil
+		}
 		if err = authorize(ctx, tx, Actor{Org: org, User: approver}, "approver", "administrator"); err != nil {
 			return invalidate(ctx, tx, a, p, "Approver authorization changed")
 		}
@@ -323,6 +327,33 @@ func (s *Store) ChangeOrder(ctx context.Context, a Actor, oid string) (any, erro
 		return Object{"state": "production"}, nil
 	})
 }
+func (s *Store) RequestReview(ctx context.Context, a Actor, cid, reason string) (any, error) {
+	return s.transaction(ctx, a.Org, func(tx pgx.Tx) (any, error) {
+		if err := authorize(ctx, tx, a, "administrator"); err != nil {
+			return nil, err
+		}
+		if len(strings.TrimSpace(reason)) < 1 || len(reason) > 1000 {
+			return nil, fail("INVALID", "Bounded review reason required")
+		}
+		c, err := loadCase(ctx, tx, a.Org, cid)
+		if err != nil {
+			return nil, err
+		}
+		if c.Status == "completed" {
+			return nil, fail("CONFLICT", "Completed cases cannot be changed by review recovery")
+		}
+		if _, err = tx.Exec(ctx, "UPDATE proposals SET status='invalidated' WHERE org_id=$1 AND case_id=$2 AND status='pending'", a.Org, cid); err != nil {
+			return nil, err
+		}
+		if _, err = tx.Exec(ctx, "UPDATE cases SET status='escalated',summary=$3 WHERE org_id=$1 AND id=$2", a.Org, cid, "Administrator review: "+reason); err != nil {
+			return nil, err
+		}
+		if err = audit(ctx, tx, a, cid, "administrator_review_requested", Object{"reason": reason}); err != nil {
+			return nil, err
+		}
+		return Object{"status": "escalated"}, nil
+	})
+}
 func (s *Store) SetPolicy(ctx context.Context, a Actor, p Policy) (any, error) {
 	return s.transaction(ctx, a.Org, func(tx pgx.Tx) (any, error) {
 		if err := authorize(ctx, tx, a, "administrator"); err != nil {
@@ -395,6 +426,9 @@ func (s *Store) NewSandbox(ctx context.Context) (string, Actor, error) {
 	}
 	defer tx.Rollback(ctx)
 	var count int
+	if _, err = tx.Exec(ctx, "SELECT pg_advisory_xact_lock(73031)"); err != nil {
+		return "", a, err
+	}
 	if err = tx.QueryRow(ctx, "SELECT count(*) FROM organizations WHERE sandbox AND expires_at>now()").Scan(&count); err != nil {
 		return "", a, err
 	}

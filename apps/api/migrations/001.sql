@@ -66,7 +66,14 @@ CREATE TABLE IF NOT EXISTS webhook_events (
  shop text NOT NULL, event_id text NOT NULL, topic text NOT NULL, body jsonb NOT NULL,
  status text NOT NULL DEFAULT 'received', created_at timestamptz NOT NULL DEFAULT now(), PRIMARY KEY(shop,event_id)
 );
+ALTER TABLE webhook_events ADD COLUMN IF NOT EXISTS reconciled_state jsonb;
 CREATE TABLE IF NOT EXISTS evaluation_runs (
  org_id text NOT NULL REFERENCES organizations(id), id text NOT NULL, report jsonb NOT NULL,
  created_at timestamptz NOT NULL DEFAULT now(), PRIMARY KEY(org_id,id)
+);
+CREATE TABLE IF NOT EXISTS model_turns (
+ org_id text NOT NULL, case_id text NOT NULL, turn_key text NOT NULL,
+ reserved integer NOT NULL CHECK(reserved>0), used integer, configuration jsonb NOT NULL,
+ created_at timestamptz NOT NULL DEFAULT now(), PRIMARY KEY(org_id,case_id,turn_key),
+ FOREIGN KEY(org_id,case_id) REFERENCES cases(org_id,id)
 );

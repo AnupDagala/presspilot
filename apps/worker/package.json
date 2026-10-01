@@ -1,1 +1,17 @@
-{"name":"@presspilot/worker","version":"0.1.0","private":true,"scripts":{"build":"tsc -p tsconfig.json","typecheck":"tsc --noEmit -p tsconfig.json","start":"node dist/worker.js"},"dependencies":{"@temporalio/activity":"latest","@temporalio/client":"latest","@temporalio/worker":"latest","@temporalio/workflow":"latest","zod":"latest"}}
+{
+  "name": "@presspilot/worker",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "start": "node dist/worker.js"
+  },
+  "dependencies": {
+    "@temporalio/activity": "1.24.0",
+    "@temporalio/client": "1.24.0",
+    "@temporalio/worker": "1.24.0",
+    "@temporalio/workflow": "1.24.0",
+    "zod": "4.6.5"
+  }
+}

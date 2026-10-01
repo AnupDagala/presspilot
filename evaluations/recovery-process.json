@@ -1,0 +1,8 @@
+{
+  "test": "worker process terminated during approval wait; approval submitted while down; replacement process replayed and completed",
+  "passed": true,
+  "businessEffects": 1,
+  "orderRetrievals": 1,
+  "paidModelCalls": 0,
+  "measuredAt": "2026-10-01T16:03:57.847Z"
+}

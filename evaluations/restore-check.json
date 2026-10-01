@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "scope": "Actual local PostgreSQL custom-format dump restored into a newly created isolated database; unique effects and approval bindings checked. Temporal and cloud recovery are separate.",
+  "orders": 1687,
+  "cases": 534,
+  "executions": 155,
+  "audit_events": 1740,
+  "bad_bindings": 0,
+  "duplicate_effects": 0,
+  "measuredAt": "2026-10-01T16:45:52.541Z"
+}

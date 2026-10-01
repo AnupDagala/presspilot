@@ -7,4 +7,5 @@ type Mutation {
  decideProposal(input: DecisionInput!): JSON!
  simulateProduction(orderId: ID!): JSON!
  updatePolicy(policy: JSON!): JSON!
+ requestCaseReview(caseId: ID!, reason: String!): JSON!
 }

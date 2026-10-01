@@ -1,0 +1,65 @@
+services:
+  postgres:
+    image: postgres:18.6
+    environment:
+      POSTGRES_USER: presspilot
+      POSTGRES_DB: presspilot
+      POSTGRES_PASSWORD_FILE: /run/secrets/database-password
+    secrets: [database-password]
+    ports: ["127.0.0.1:55432:5432"]
+    volumes: ["business-data:/var/lib/postgresql"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U presspilot -d presspilot"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+  temporal:
+    image: temporalio/temporal:1.9.1@sha256:ad4c82c97bd12b417d1ea942610dbcd511afb250c4d5ed26c694009533df447e
+    command:
+      [
+        "server",
+        "start-dev",
+        "--ip",
+        "0.0.0.0",
+        "--db-filename",
+        "/data/temporal.db",
+      ]
+    ports: ["127.0.0.1:7233:7233", "127.0.0.1:8233:8233"]
+    volumes: ["temporal-infrastructure:/data"]
+  api:
+    build: { context: ., dockerfile: apps/api/Dockerfile }
+    environment:
+      DATABASE_URL_FILE: /run/secrets/database-url
+      WORKER_SECRET_FILE: /run/secrets/worker-secret
+      SANDBOX_ENABLED: "true"
+      TEMPORAL_ADDRESS: temporal:7233
+      WEB_ORIGIN: http://localhost:5173
+    secrets: [database-url, worker-secret]
+    ports: ["127.0.0.1:8080:8080"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      temporal: { condition: service_started }
+    restart: unless-stopped
+  worker:
+    build: { context: ., dockerfile: apps/worker/Dockerfile }
+    environment:
+      BUSINESS_API: http://api:8080
+      WORKER_SECRET_FILE: /run/secrets/worker-secret
+      TEMPORAL_ADDRESS: temporal:7233
+      LIVE_MODEL_ENABLED: "false"
+    secrets: [worker-secret]
+    depends_on: [api, temporal]
+    restart: unless-stopped
+  web:
+    build: { context: ., dockerfile: apps/web/Dockerfile }
+    environment: { BUSINESS_API: "http://api:8080", PORT: "8080" }
+    ports: ["127.0.0.1:5173:8080"]
+    depends_on: [api]
+    restart: unless-stopped
+volumes:
+  business-data:
+  temporal-infrastructure:
+secrets:
+  database-password: { file: ./runtime/secrets/database-password }
+  database-url: { file: ./runtime/secrets/database-url }
+  worker-secret: { file: ./runtime/secrets/worker-secret }

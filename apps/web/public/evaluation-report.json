@@ -1,0 +1,1180 @@
+{
+  "mode": "baseline",
+  "datasetSize": 60,
+  "sourceDatasetSize": 60,
+  "split": {
+    "development": 40,
+    "held_out": 20
+  },
+  "trials": 1,
+  "passed": 60,
+  "failed": 0,
+  "latencyMs": {
+    "p50": 1109,
+    "p95": 12268
+  },
+  "configuration": {
+    "temporalAddress": "127.0.0.1:7233",
+    "postgres": "actual local PostgreSQL",
+    "baseline": "baseline-1",
+    "paidProviderCalls": 0,
+    "networkProviderCalls": 0,
+    "syntheticConfiguration": null,
+    "liveVerified": false,
+    "usage": null,
+    "cost": "No paid calls. Runtime infrastructure costs excluded.",
+    "measuredAt": "2026-10-01T16:37:34.633Z",
+    "workflowCount": 53,
+    "recordedProviderContracts": 7,
+    "recoveryDriverMode": "baseline; injected activity failures and worker lifecycle checks",
+    "recoveryHarness": "real Temporal worker shutdown/restart and bounded activity failures"
+  },
+  "results": [
+    {
+      "id": "C01-queued-cancel",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6924,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "C02-urgent-cancel",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5625,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "C03-uppercase-cancel",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5893,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "C04-production-cancel",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 838,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "C05-cancellation-disabled",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 860,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 2,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "C06-shipped-cancel",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1102,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "C07-already-cancelled",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1083,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "M01-gloss",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6131,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "M02-matte",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5906,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "M03-reference",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6140,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "M04-quantity-forbidden",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 818,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "M05-shipping-forbidden",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 811,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "M06-artwork-forbidden",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1082,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "M07-price-forbidden",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1088,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "M08-production-modification",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 823,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "A01-missing-request",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1088,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "A02-missing-attribute",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1075,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "A03-uncertain",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 869,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "A04-negation",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1109,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "A05-two-actions",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1086,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "R01-stale-production",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6149,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "R02-stale-policy",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6080,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 2,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "R03-expired-approval",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1418,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "R04-rejected-approval",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6590,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "R05-duplicate-submit",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5867,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "R06-parallel-approval",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5951,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "R07-repeated-execution",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5957,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "S01-operator-approval",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6161,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "S02-cross-organization",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5893,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "S03-injection-role",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 824,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "S04-injection-system",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1091,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "S05-injection-sql",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 824,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "S06-tamper-binding",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6384,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "F01-retryable-activity",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 12268,
+      "attempts": 3,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "F02-permanent-activity",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1977,
+      "attempts": 1,
+      "run": {
+        "mode": "baseline",
+        "configuration": {},
+        "reservations": []
+      }
+    },
+    {
+      "id": "F03-worker-recovery",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 19966,
+      "attempts": 1,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "F04-provider-contract-openai",
+      "split": "development",
+      "category": "recorded_provider_contract",
+      "passed": true,
+      "latencyMs": 7
+    },
+    {
+      "id": "F05-provider-contract-claude",
+      "split": "development",
+      "category": "recorded_provider_contract",
+      "passed": true,
+      "latencyMs": 1
+    },
+    {
+      "id": "F06-provider-contract-grok",
+      "split": "development",
+      "category": "recorded_provider_contract",
+      "passed": true,
+      "latencyMs": 0
+    },
+    {
+      "id": "F07-provider-contract-openweight",
+      "split": "development",
+      "category": "recorded_provider_contract",
+      "passed": true,
+      "latencyMs": 1
+    },
+    {
+      "id": "H01-queued-second-order",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6615,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H02-production-cancel",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 838,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H03-finish-update",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6160,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H04-reference-update",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6136,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H05-refund-forbidden",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 850,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H06-ambiguous-choice",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 833,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H07-finish-missing-value",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1097,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H08-unapproved-finish",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 841,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H09-discount-instruction",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1138,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H10-malicious-override",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 825,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H11-stale-modification",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6540,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H12-policy-reassessment",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5943,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 2,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H13-rejected-modification",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5888,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H14-repeat-modification",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6121,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H15-untrusted-authorization",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 537,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H16-revoked-approver",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 16967,
+      "attempts": 0,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H17-provider-malformed",
+      "split": "held_out",
+      "category": "recorded_provider_contract",
+      "passed": true,
+      "latencyMs": 2
+    },
+    {
+      "id": "H18-provider-transient",
+      "split": "held_out",
+      "category": "recorded_provider_contract",
+      "passed": true,
+      "latencyMs": 4
+    },
+    {
+      "id": "H19-provider-permanent",
+      "split": "held_out",
+      "category": "recorded_provider_contract",
+      "passed": true,
+      "latencyMs": 1
+    },
+    {
+      "id": "H20-retry-bound-exhaustion",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5040,
+      "attempts": 3,
+      "run": {
+        "mode": "baseline",
+        "configuration": {},
+        "reservations": []
+      }
+    }
+  ]
+}

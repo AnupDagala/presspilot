@@ -1,0 +1,174 @@
+{
+  "measuredAt": "2026-10-01T17:44:03.558Z",
+  "scope": "Actual local application and deployment preparation. No cloud deployment or paid model calls.",
+  "runtimes": {
+    "go": "1.27.1",
+    "node": "24.11.0",
+    "postgresql": "18.6",
+    "temporalCLI": "1.9.1",
+    "temporalServer": "1.32.0",
+    "terraform": "1.16.4"
+  },
+  "backend": {
+    "passed": 18,
+    "subtests": 3,
+    "skipped": 0,
+    "database": "actual local PostgreSQL",
+    "vet": "passed"
+  },
+  "unitContracts": {
+    "passed": 12,
+    "failed": 0,
+    "paidCalls": 0
+  },
+  "browser": {
+    "baseURL": "http://localhost:5180",
+    "browser": "installed Chrome",
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 32017.560999999998,
+    "measuredAt": "2026-10-01T17:40:42.771Z"
+  },
+  "evaluations": [
+    {
+      "mode": "baseline",
+      "datasetSize": 60,
+      "split": {
+        "development": 40,
+        "held_out": 20
+      },
+      "trials": 1,
+      "passed": 60,
+      "failed": 0,
+      "latencyMs": {
+        "p50": 1109,
+        "p95": 12268
+      },
+      "configuration": {
+        "temporalAddress": "127.0.0.1:7233",
+        "postgres": "actual local PostgreSQL",
+        "baseline": "baseline-1",
+        "paidProviderCalls": 0,
+        "networkProviderCalls": 0,
+        "syntheticConfiguration": null,
+        "liveVerified": false,
+        "usage": null,
+        "cost": "No paid calls. Runtime infrastructure costs excluded.",
+        "measuredAt": "2026-10-01T16:37:34.633Z",
+        "workflowCount": 53,
+        "recordedProviderContracts": 7,
+        "recoveryDriverMode": "baseline; injected activity failures and worker lifecycle checks",
+        "recoveryHarness": "real Temporal worker shutdown/restart and bounded activity failures"
+      },
+      "source": "evaluations/results-baseline.json"
+    },
+    {
+      "mode": "mocked",
+      "datasetSize": 60,
+      "split": {
+        "development": 40,
+        "held_out": 20
+      },
+      "trials": 1,
+      "passed": 60,
+      "failed": 0,
+      "latencyMs": {
+        "p50": 1126,
+        "p95": 8103
+      },
+      "configuration": {
+        "temporalAddress": "127.0.0.1:7233",
+        "postgres": "actual local PostgreSQL",
+        "baseline": "baseline-1",
+        "paidProviderCalls": 0,
+        "networkProviderCalls": 0,
+        "syntheticConfiguration": {
+          "provider": "mocked",
+          "model": "recorded-fixture-v1",
+          "endpoint": "mock://recorded",
+          "maxOutputTokens": 0,
+          "promptVersion": "mocked-contract-1"
+        },
+        "liveVerified": false,
+        "usage": null,
+        "cost": "No paid calls. Runtime infrastructure costs excluded.",
+        "measuredAt": "2026-10-01T16:46:53.813Z",
+        "workflowCount": 53,
+        "recordedProviderContracts": 7,
+        "recoveryDriverMode": "baseline; injected activity failures and worker lifecycle checks",
+        "recoveryHarness": "real Temporal worker shutdown/restart and bounded activity failures"
+      },
+      "source": "evaluations/results-mocked.json"
+    }
+  ],
+  "processRecovery": [
+    {
+      "test": "worker process terminated during approval wait; approval submitted while down; replacement process replayed and completed",
+      "passed": true,
+      "mode": "baseline",
+      "businessEffects": 1,
+      "orderRetrievals": 1,
+      "paidModelCalls": 0,
+      "measuredAt": "2026-10-01T17:41:02.826Z"
+    },
+    {
+      "test": "worker process terminated during approval wait; approval submitted while down; replacement process replayed and completed",
+      "passed": true,
+      "mode": "mocked",
+      "businessEffects": 1,
+      "orderRetrievals": 1,
+      "paidModelCalls": 0,
+      "measuredAt": "2026-10-01T17:41:25.259Z"
+    }
+  ],
+  "privateSessions": {
+    "passed": true,
+    "scope": "Actual browser private operator and approver sign-in; sandbox role escalation denied; operator approval disabled; authorized approval completed one fictional cancellation",
+    "paidModelCalls": 0,
+    "measuredAt": "2026-10-01T16:55:09.944Z"
+  },
+  "databaseRestore": {
+    "passed": true,
+    "scope": "Actual local PostgreSQL custom-format dump restored into a newly created isolated database; unique effects and approval bindings checked. Temporal and cloud recovery are separate.",
+    "orders": 1687,
+    "cases": 534,
+    "executions": 155,
+    "audit_events": 1740,
+    "bad_bindings": 0,
+    "duplicate_effects": 0,
+    "measuredAt": "2026-10-01T16:45:52.541Z"
+  },
+  "contrast": {
+    "passed": true,
+    "scope": "Computed foreground/background ratios for visible text in the seeded case detail, excluding disabled controls. Not a complete accessibility audit.",
+    "checked": 76,
+    "failures": [],
+    "measuredAt": "2026-10-01T17:05:46.241Z"
+  },
+  "checks": {
+    "build": "passed",
+    "typecheck": "passed",
+    "eslint": "passed",
+    "prettier": "passed",
+    "composeIsolation": "passed; no Docker execution",
+    "npmAudit": "0 vulnerabilities",
+    "goVulncheck": "0 vulnerabilities",
+    "targetedSecretScan": "passed",
+    "gitleaks": "staged source and history: 0 leaks",
+    "terraform": "fmt and validate passed; signed Google provider 7.46.1; no plan/apply",
+    "tracing": "local console export and secret omission verified"
+  },
+  "unverified": [
+    "Docker image/Compose execution (no engine)",
+    "Live inference for OpenAI, Anthropic, xAI and open-weight endpoint (no credentials)",
+    "Actual Shopify development-store calls and deliveries (no credentials)",
+    "GCP deployment, cloud trace export and alert delivery (no authorization/credentials)",
+    "Joint PostgreSQL/Temporal cloud restore",
+    "GitHub-hosted CI execution",
+    "Full worker/provider distributed tracing",
+    "Multi-version Temporal worker rollout"
+  ],
+  "startupCorrection": "Final browser run passed after correcting a manual sandbox environment-variable typo; the checked-in startup script already used the correct variable.",
+  "recoveryAuthorization": "Worker requester checks remain enforced. Administrator-only review is a separately authorized GraphQL operation and does not modify orders."
+}

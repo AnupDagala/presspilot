@@ -1,0 +1,1333 @@
+{
+  "mode": "mocked",
+  "datasetSize": 60,
+  "sourceDatasetSize": 60,
+  "split": {
+    "development": 40,
+    "held_out": 20
+  },
+  "trials": 1,
+  "passed": 60,
+  "failed": 0,
+  "latencyMs": {
+    "p50": 1126,
+    "p95": 8103
+  },
+  "configuration": {
+    "temporalAddress": "127.0.0.1:7233",
+    "postgres": "actual local PostgreSQL",
+    "baseline": "baseline-1",
+    "paidProviderCalls": 0,
+    "networkProviderCalls": 0,
+    "syntheticConfiguration": {
+      "provider": "mocked",
+      "model": "recorded-fixture-v1",
+      "endpoint": "mock://recorded",
+      "maxOutputTokens": 0,
+      "promptVersion": "mocked-contract-1"
+    },
+    "liveVerified": false,
+    "usage": null,
+    "cost": "No paid calls. Runtime infrastructure costs excluded.",
+    "measuredAt": "2026-10-01T16:46:53.813Z",
+    "workflowCount": 53,
+    "recordedProviderContracts": 7,
+    "recoveryDriverMode": "baseline; injected activity failures and worker lifecycle checks",
+    "recoveryHarness": "real Temporal worker shutdown/restart and bounded activity failures"
+  },
+  "results": [
+    {
+      "id": "C01-queued-cancel",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6060,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "C02-urgent-cancel",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6163,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "C03-uppercase-cancel",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5924,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "C04-production-cancel",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 859,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "INELIGIBLE: Production has started or the order is no longer queued; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "C05-cancellation-disabled",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 861,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "INELIGIBLE: Cancellation is disabled or arguments are unsupported",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "C06-shipped-cancel",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1102,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "INELIGIBLE: Production has started or the order is no longer queued; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "C07-already-cancelled",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 866,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "INELIGIBLE: Production has started or the order is no longer queued; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "M01-gloss",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6187,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "M02-matte",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6200,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "M03-reference",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5982,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "M04-quantity-forbidden",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 569,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Request includes unsupported changes or untrusted instructions; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "M05-shipping-forbidden",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1089,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Request includes unsupported changes or untrusted instructions; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "M06-artwork-forbidden",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1105,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Request includes unsupported changes or untrusted instructions; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "M07-price-forbidden",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 840,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Request includes unsupported changes or untrusted instructions; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "M08-production-modification",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1127,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "INELIGIBLE: Production has started or the order is no longer queued; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "A01-missing-request",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 839,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Missing or unsupported intent or attribute value; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "A02-missing-attribute",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1101,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Missing or unsupported intent or attribute value; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "A03-uncertain",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1088,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Request intent is ambiguous; obtain explicit customer instruction",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "A04-negation",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 825,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Request intent is ambiguous; obtain explicit customer instruction",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "A05-two-actions",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1084,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Multiple consequential actions require clarification",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "R01-stale-production",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6491,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "INELIGIBLE: Production has started or the order is no longer queued; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "R02-stale-policy",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5887,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "INELIGIBLE: Cancellation is disabled or arguments are unsupported",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "R03-expired-approval",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1378,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "R04-rejected-approval",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6473,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "R05-duplicate-submit",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5948,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "R06-parallel-approval",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6380,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "R07-repeated-execution",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5715,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "S01-operator-approval",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5918,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "S02-cross-organization",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6224,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "S03-injection-role",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 562,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Request includes unsupported changes or untrusted instructions; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "S04-injection-system",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1111,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Request includes unsupported changes or untrusted instructions; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "S05-injection-sql",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 835,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Request includes unsupported changes or untrusted instructions; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "S06-tamper-binding",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6456,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "F01-retryable-activity",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 14611,
+      "attempts": 3,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "F02-permanent-activity",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 2824,
+      "attempts": 1,
+      "run": {
+        "mode": "baseline",
+        "configuration": {},
+        "reservations": []
+      }
+    },
+    {
+      "id": "F03-worker-recovery",
+      "split": "development",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 8103,
+      "attempts": 1,
+      "run": {
+        "mode": "baseline",
+        "configuration": {
+          "mode": "baseline",
+          "model": null,
+          "usage": null,
+          "provider": null,
+          "modelCalls": 0,
+          "policyVersion": 1,
+          "promptVersion": "baseline-1"
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "F04-provider-contract-openai",
+      "split": "development",
+      "category": "recorded_provider_contract",
+      "passed": true,
+      "latencyMs": 11
+    },
+    {
+      "id": "F05-provider-contract-claude",
+      "split": "development",
+      "category": "recorded_provider_contract",
+      "passed": true,
+      "latencyMs": 1
+    },
+    {
+      "id": "F06-provider-contract-grok",
+      "split": "development",
+      "category": "recorded_provider_contract",
+      "passed": true,
+      "latencyMs": 0
+    },
+    {
+      "id": "F07-provider-contract-openweight",
+      "split": "development",
+      "category": "recorded_provider_contract",
+      "passed": true,
+      "latencyMs": 3
+    },
+    {
+      "id": "H01-queued-second-order",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6272,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H02-production-cancel",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 847,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "INELIGIBLE: Production has started or the order is no longer queued; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H03-finish-update",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6362,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H04-reference-update",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5779,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H05-refund-forbidden",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 839,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Request includes unsupported changes or untrusted instructions; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H06-ambiguous-choice",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1113,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Request intent is ambiguous; obtain explicit customer instruction",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H07-finish-missing-value",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 839,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Missing or unsupported intent or attribute value; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H08-unapproved-finish",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1126,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Missing or unsupported intent or attribute value; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H09-discount-instruction",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 838,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Request includes unsupported changes or untrusted instructions; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H10-malicious-override",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 1103,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Request includes unsupported changes or untrusted instructions; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H11-stale-modification",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6453,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "INELIGIBLE: Production has started or the order is no longer queued; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H12-policy-reassessment",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5983,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "INELIGIBLE: Cancellation is disabled or arguments are unsupported",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H13-rejected-modification",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 5711,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H14-repeat-modification",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6057,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H15-untrusted-authorization",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 901,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 3,
+          "modelCalls": 3,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Request includes unsupported changes or untrusted instructions; human review required",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H16-revoked-approver",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 17624,
+      "attempts": 0,
+      "run": {
+        "mode": "mocked",
+        "configuration": {
+          "mode": "mocked",
+          "model": "recorded-fixture-v1",
+          "usage": null,
+          "endpoint": "mock://recorded",
+          "provider": "mocked",
+          "toolCalls": 4,
+          "modelCalls": 4,
+          "promptVersion": "mocked-contract-1",
+          "decisionSummary": "Retrieved evidence supports an exact proposal; awaiting authorized approval",
+          "maxOutputTokens": 0
+        },
+        "reservations": []
+      }
+    },
+    {
+      "id": "H17-provider-malformed",
+      "split": "held_out",
+      "category": "recorded_provider_contract",
+      "passed": true,
+      "latencyMs": 1
+    },
+    {
+      "id": "H18-provider-transient",
+      "split": "held_out",
+      "category": "recorded_provider_contract",
+      "passed": true,
+      "latencyMs": 3
+    },
+    {
+      "id": "H19-provider-permanent",
+      "split": "held_out",
+      "category": "recorded_provider_contract",
+      "passed": true,
+      "latencyMs": 0
+    },
+    {
+      "id": "H20-retry-bound-exhaustion",
+      "split": "held_out",
+      "category": "business_workflow",
+      "passed": true,
+      "latencyMs": 6122,
+      "attempts": 3,
+      "run": {
+        "mode": "baseline",
+        "configuration": {},
+        "reservations": []
+      }
+    }
+  ]
+}

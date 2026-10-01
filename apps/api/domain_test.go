@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"os"
 	"sync"
 	"testing"
 	"time"
@@ -11,7 +10,7 @@ import (
 
 func fixture(t *testing.T) (*Store, Actor) {
 	t.Helper()
-	url := os.Getenv("TEST_DATABASE_URL")
+	url := secret("TEST_DATABASE_URL")
 	if url == "" {
 		t.Skip("TEST_DATABASE_URL required: actual PostgreSQL integration test")
 	}

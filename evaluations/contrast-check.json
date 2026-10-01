@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "scope": "Computed foreground/background ratios for visible text in the seeded case detail, excluding disabled controls. Not a complete accessibility audit.",
+  "checked": 76,
+  "failures": [],
+  "measuredAt": "2026-10-01T17:05:46.241Z"
+}

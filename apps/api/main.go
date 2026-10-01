@@ -3,12 +3,14 @@ package main
 import (
 	"context"
 	"crypto/subtle"
+	"crypto/tls"
 	"embed"
 	"encoding/json"
 	graphql "github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	oteltrace "go.opentelemetry.io/otel/trace"
 	"go.temporal.io/api/enums/v1"
 	"go.temporal.io/sdk/client"
 	"log/slog"
@@ -76,6 +78,13 @@ func (r *Resolver) UpdatePolicy(ctx context.Context, args struct{ Policy JSON })
 	v, e := r.Store.SetPolicy(ctx, current(ctx), p)
 	return JSON{v}, e
 }
+func (r *Resolver) RequestCaseReview(ctx context.Context, args struct {
+	CaseID graphql.ID
+	Reason string
+}) (JSON, error) {
+	v, e := r.Store.RequestReview(ctx, current(ctx), string(args.CaseID), args.Reason)
+	return JSON{v}, e
+}
 func env(k, f string) string {
 	if v := os.Getenv(k); v != "" {
 		return v
@@ -104,6 +113,15 @@ func main() {
 	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, nil)))
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
+	traces, traceErr := setupTracing(ctx)
+	if traceErr != nil {
+		panic("tracing configuration unavailable")
+	}
+	defer func() {
+		shutdown, c := context.WithTimeout(context.Background(), 5*time.Second)
+		defer c()
+		_ = traces.Shutdown(shutdown)
+	}()
 	db, e := pgxpool.New(ctx, secret("DATABASE_URL"))
 	if e != nil {
 		panic("database configuration invalid")
@@ -113,13 +131,22 @@ func main() {
 		panic("database unavailable")
 	}
 	migration, _ := files.ReadFile("migrations/001.sql")
-	if _, e = db.Exec(ctx, string(migration)); e != nil {
-		panic(e)
+	if env("AUTO_MIGRATE", "true") == "true" || os.Getenv("MIGRATE_ONLY") == "true" {
+		if _, e = db.Exec(ctx, string(migration)); e != nil {
+			panic(e)
+		}
 	}
 	if os.Getenv("MIGRATE_ONLY") == "true" {
 		return
 	}
 	store := &Store{db}
+	if os.Getenv("RECONCILE_SHOPIFY") == "true" {
+		if e = reconcileShopify(ctx, store, ShopifyClient{Shop: osShop(), Token: secret("SHOPIFY_ACCESS_TOKEN"), Version: env("SHOPIFY_API_VERSION", "2026-10")}); e != nil {
+			slog.Error("shopify_reconciliation_failed", "code", category(e))
+			os.Exit(1)
+		}
+		return
+	}
 	sdl, _ := files.ReadFile("schema.graphql")
 	schema := graphql.MustParseSchema(string(sdl), &Resolver{store}, graphql.MaxDepth(8), graphql.MaxQueryLength(10000), graphql.MaxParallelism(4))
 	workerSecret := secret("WORKER_SECRET")
@@ -127,6 +154,26 @@ func main() {
 		panic("WORKER_SECRET must contain at least 32 characters")
 	}
 	mux := http.NewServeMux()
+	mux.HandleFunc("/api/session", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "POST" {
+			reply(w, 405, Object{"error": "POST required"})
+			return
+		}
+		var in struct {
+			AccessToken string `json:"accessToken"`
+		}
+		if json.NewDecoder(r.Body).Decode(&in) != nil || len(in.AccessToken) > 256 {
+			reply(w, 400, Object{"error": "Invalid session input"})
+			return
+		}
+		a, err := store.Session(r.Context(), in.AccessToken)
+		if err != nil {
+			reply(w, 401, Object{"error": "Session unavailable or expired"})
+			return
+		}
+		cookie(w, in.AccessToken)
+		reply(w, 200, Object{"actor": a})
+	})
 	mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		if e := db.Ping(r.Context()); e != nil {
 			reply(w, 503, Object{"status": "database_unavailable"})
@@ -212,6 +259,9 @@ func main() {
 		v, err := store.Tool(r.Context(), in)
 		if err != nil {
 			code := category(err)
+			if code == "RETRYABLE" {
+				slog.Error("tool_backend_failure", "tool", in.Name, "code", code)
+			}
 			status := 422
 			message := err.Error()
 			if code == "RETRYABLE" {
@@ -237,9 +287,10 @@ func main() {
 		}
 		r.Body = http.MaxBytesReader(w, r.Body, 65536)
 		mux.ServeHTTP(w, r)
-		slog.Info("http_request", "request_id", trace, "method", r.Method, "path", r.URL.Path, "duration_ms", time.Since(start).Milliseconds())
+		spanContext := oteltrace.SpanContextFromContext(r.Context())
+		slog.Info("http_request", "request_id", trace, "method", r.Method, "path", r.URL.Path, "trace_id", spanContext.TraceID().String(), "span_id", spanContext.SpanID().String(), "duration_ms", time.Since(start).Milliseconds())
 	})
-	server := &http.Server{Addr: env("API_BIND", "127.0.0.1") + ":" + env("PORT", "8080"), Handler: handler, ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 15 * time.Second, WriteTimeout: 30 * time.Second}
+	server := &http.Server{Addr: env("API_BIND", "127.0.0.1") + ":" + env("PORT", "8080"), Handler: tracedHTTP(traces, handler), ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 15 * time.Second, WriteTimeout: 30 * time.Second}
 	go func() {
 		<-ctx.Done()
 		shutdown, c := context.WithTimeout(context.Background(), 10*time.Second)
@@ -267,14 +318,21 @@ func dispatch(ctx context.Context, s *Store) {
 		case <-ticker.C:
 		}
 		if temporal == nil {
-			c, e := client.Dial(client.Options{HostPort: env("TEMPORAL_ADDRESS", "127.0.0.1:7233"), Namespace: env("TEMPORAL_NAMESPACE", "default")})
+			options := client.Options{HostPort: env("TEMPORAL_ADDRESS", "127.0.0.1:7233"), Namespace: env("TEMPORAL_NAMESPACE", "default")}
+			if os.Getenv("TEMPORAL_TLS") == "true" {
+				options.ConnectionOptions.TLS = &tls.Config{MinVersion: tls.VersionTLS12}
+			}
+			if key := secret("TEMPORAL_API_KEY"); key != "" {
+				options.Credentials = client.NewAPIKeyStaticCredentials(key)
+			}
+			c, e := client.Dial(options)
 			if e != nil {
 				slog.Warn("temporal_unavailable")
 				continue
 			}
 			temporal = c
 		}
-		rows, e := s.DB.Query(ctx, "SELECT org_id,id,mode FROM cases WHERE NOT workflow_started AND status='investigating' ORDER BY created_at LIMIT 10")
+		rows, e := s.DB.Query(ctx, "SELECT org_id,id,mode FROM cases WHERE NOT workflow_started AND status='investigating' AND EXISTS(SELECT 1 FROM organizations o WHERE o.id=cases.org_id AND (o.expires_at IS NULL OR o.expires_at>now())) ORDER BY created_at LIMIT 10")
 		if e != nil {
 			continue
 		}
@@ -296,7 +354,7 @@ func dispatch(ctx context.Context, s *Store) {
 			}
 		}
 		// Expiry is a business transition even if the worker is down.
-		_, _ = s.DB.Exec(ctx, "UPDATE cases SET status='escalated',summary='Approval window expired; human review required' WHERE status='awaiting_approval' AND EXISTS(SELECT 1 FROM proposals p WHERE p.org_id=cases.org_id AND p.case_id=cases.id AND p.status='pending' AND p.expires_at<now())")
+		_, _ = s.DB.Exec(ctx, "WITH expired AS (UPDATE cases SET status='escalated',summary='Approval window expired; human review required' WHERE status='awaiting_approval' AND EXISTS(SELECT 1 FROM proposals p WHERE p.org_id=cases.org_id AND p.case_id=cases.id AND p.status='pending' AND p.expires_at<now()) RETURNING org_id,id) INSERT INTO audit_events(org_id,case_id,actor,kind,data) SELECT org_id,id,'dispatcher','approval_expired','{}'::jsonb FROM expired")
 	}
 }
 

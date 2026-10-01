@@ -46,6 +46,16 @@ func registerShopify(mux *http.ServeMux, s *Store) {
 			reply(w, 503, Object{"error": "Event not persisted; redeliver"})
 			return
 		}
+		var original Object
+		var originalTopic string
+		if e = s.DB.QueryRow(r.Context(), "SELECT body,topic FROM webhook_events WHERE shop=$1 AND event_id=$2", shop, event).Scan(&original, &originalTopic); e != nil {
+			reply(w, 503, Object{"error": "Persisted event verification unavailable"})
+			return
+		}
+		if digest(original) != digest(payload) || originalTopic != topic {
+			reply(w, 409, Object{"error": "Event identity reused with different content"})
+			return
+		}
 		reply(w, 200, Object{"persisted": true, "integration": "contract_only"})
 	})
 }

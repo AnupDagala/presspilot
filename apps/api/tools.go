@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"github.com/jackc/pgx/v5"
+	"math"
+	"strconv"
 	"time"
 )
 
@@ -26,6 +28,10 @@ type ToolArgs struct {
 
 func (s *Store) Tool(ctx context.Context, in ToolInput) (any, error) {
 	if in.Name == "execute_approved_action" {
+		var boundCase string
+		if err := s.DB.QueryRow(ctx, "SELECT case_id FROM proposals WHERE org_id=$1 AND id=$2", in.Org, in.Args.ProposalID).Scan(&boundCase); err != nil || boundCase != in.CaseID {
+			return nil, fail("NOT_FOUND", "Case-bound proposal not found")
+		}
 		return s.Execute(ctx, in.Org, in.Args.ProposalID)
 	}
 	return s.transaction(ctx, in.Org, func(tx pgx.Tx) (any, error) {
@@ -54,13 +60,14 @@ func (s *Store) Tool(ctx context.Context, in ToolInput) (any, error) {
 			return nil, err
 		}
 		var calls int
-		if err = tx.QueryRow(ctx, "SELECT count(*) FROM tool_calls WHERE org_id=$1 AND case_id=$2 AND name NOT IN ('get_case','record_run')", in.Org, in.CaseID).Scan(&calls); err != nil {
+		control := in.Name == "get_case" || in.Name == "record_run" || in.Name == "record_model_response" || in.Name == "reserve_model_turn" || in.Name == "get_model_response"
+		if err = tx.QueryRow(ctx, "SELECT count(*) FROM tool_calls WHERE org_id=$1 AND case_id=$2 AND name NOT IN ('get_case','record_run','record_model_response','reserve_model_turn','get_model_response')", in.Org, in.CaseID).Scan(&calls); err != nil {
 			return nil, err
 		}
-		if calls >= p.MaxTools && in.Name != "get_case" && in.Name != "escalate_case" && in.Name != "record_run" {
+		if calls >= p.MaxTools && !control && in.Name != "escalate_case" {
 			return nil, fail("LIMIT", "Tool call budget exhausted")
 		}
-		if in.Name != "get_case" && in.Name != "get_order_history" && in.Name != "record_run" && (c.Status == "completed" || c.Status == "escalated") {
+		if !control && in.Name != "get_order_history" && (c.Status == "completed" || c.Status == "escalated") {
 			return nil, fail("CONFLICT", "Case already terminal")
 		}
 		o, err := loadOrder(ctx, tx, in.Org, c.OrderID)
@@ -88,7 +95,7 @@ func (s *Store) Tool(ctx context.Context, in ToolInput) (any, error) {
 		case "get_applicable_policy":
 			result = p
 		case "get_order_history":
-			rows, e := tx.Query(ctx, "SELECT kind,data FROM audit_events WHERE org_id=$1 AND (data->>'order'=$2 OR case_id=$3) ORDER BY seq DESC LIMIT 20", in.Org, o.ID, c.ID)
+			rows, e := tx.Query(ctx, "SELECT kind,data FROM audit_events WHERE org_id=$1 AND (data->>'order'=$2 OR data->'order'->>'id'=$2 OR data->>'orderId'=$2 OR case_id=$3) ORDER BY seq DESC LIMIT 20", in.Org, o.ID, c.ID)
 			if e != nil {
 				return nil, e
 			}
@@ -168,6 +175,74 @@ func (s *Store) Tool(ctx context.Context, in ToolInput) (any, error) {
 				return nil, err
 			}
 			result = Object{"status": "escalated", "reason": in.Args.Reason}
+		case "reserve_model_turn":
+			var sandbox bool
+			if err = tx.QueryRow(ctx, "SELECT sandbox FROM organizations WHERE id=$1", in.Org).Scan(&sandbox); err != nil {
+				return nil, err
+			}
+			if c.Mode != "live" || sandbox {
+				return nil, fail("FORBIDDEN", "Only private live cases may reserve provider calls")
+			}
+			amount, ok := in.Args.Config["reserve"].(float64)
+			if !ok || amount < 1 || amount > 20000 || amount != float64(int(amount)) {
+				return nil, fail("INVALID", "Invalid token reservation")
+			}
+			var turns, charged, dailyTurns, dailyTokens int
+			if err = tx.QueryRow(ctx, "SELECT count(*),COALESCE(sum(COALESCE(used,reserved)),0) FROM model_turns WHERE org_id=$1 AND case_id=$2", in.Org, c.ID).Scan(&turns, &charged); err != nil {
+				return nil, err
+			}
+			if _, err = tx.Exec(ctx, "SELECT pg_advisory_xact_lock(73032)"); err != nil {
+				return nil, err
+			}
+			if err = tx.QueryRow(ctx, "SELECT count(*),COALESCE(sum(COALESCE(used,reserved)),0) FROM model_turns WHERE created_at>now()-interval '24 hours'").Scan(&dailyTurns, &dailyTokens); err != nil {
+				return nil, err
+			}
+			dayCalls, _ := strconv.Atoi(env("MODEL_DAILY_CALL_LIMIT", "20"))
+			dayTokens, _ := strconv.Atoi(env("MODEL_DAILY_TOKEN_LIMIT", "100000"))
+			maxRate, rateErr := strconv.ParseFloat(env("MODEL_MAX_USD_PER_MTOK", "0"), 64)
+			usdLimit, limitErr := strconv.ParseFloat(env("MODEL_DAILY_USD_LIMIT", "0"), 64)
+			if rateErr != nil || limitErr != nil || math.IsNaN(maxRate) || math.IsInf(maxRate, 0) || math.IsNaN(usdLimit) || math.IsInf(usdLimit, 0) || maxRate <= 0 || usdLimit <= 0 {
+				return nil, fail("PERMANENT", "Configure an explicit provider pricing upper bound and daily spending limit before live execution")
+			}
+			if float64(dailyTokens+int(amount))*maxRate/1000000 > usdLimit {
+				return nil, fail("LIMIT", "Daily estimated provider spending bound exhausted")
+			}
+			if turns >= p.MaxTurns || charged+int(amount) > p.MaxTokens || dailyTurns >= dayCalls || dailyTokens+int(amount) > dayTokens {
+				return nil, fail("LIMIT", "Persisted model call or token budget exhausted")
+			}
+			pricedConfig := Object{"request": in.Args.Config, "maxUSDPerMillionTokens": maxRate, "dailyUSDLimit": usdLimit}
+			if _, err = tx.Exec(ctx, "INSERT INTO model_turns(org_id,case_id,turn_key,reserved,configuration) VALUES($1,$2,$3,$4,$5)", in.Org, c.ID, in.CallID, int(amount), pricedConfig); err != nil {
+				return nil, err
+			}
+			result = Object{"reserved": amount, "key": in.CallID}
+		case "record_model_response":
+			if c.Mode == "live" {
+				usage, ok := in.Args.Config["usage"].(map[string]any)
+				if !ok {
+					return nil, fail("INVALID", "Live provider usage must be reported")
+				}
+				input, iok := usage["input"].(float64)
+				output, ook := usage["output"].(float64)
+				key, kok := in.Args.Config["reservationKey"].(string)
+				if !iok || !ook || !kok || input < 0 || output < 0 || input+output > 200000 {
+					return nil, fail("INVALID", "Invalid provider usage")
+				}
+				if _, err = tx.Exec(ctx, "UPDATE model_turns SET used=$4 WHERE org_id=$1 AND case_id=$2 AND turn_key=$3", in.Org, c.ID, key, int(input+output)); err != nil {
+					return nil, err
+				}
+			}
+			result = Object{"recorded": true}
+		case "get_model_response":
+			key, ok := in.Args.Config["key"].(string)
+			if !ok || len(key) > 128 {
+				return nil, fail("INVALID", "Bounded observation key required")
+			}
+			var observation Object
+			err = tx.QueryRow(ctx, "SELECT input->'args'->'config' FROM tool_calls WHERE org_id=$1 AND case_id=$2 AND call_id=$3 AND name='record_model_response'", in.Org, c.ID, key).Scan(&observation)
+			if err != nil && !errors.Is(err, pgx.ErrNoRows) {
+				return nil, err
+			}
+			result = Object{"response": observation}
 		case "record_run":
 			if _, err = tx.Exec(ctx, "UPDATE cases SET config=$3 WHERE org_id=$1 AND id=$2", in.Org, c.ID, in.Args.Config); err != nil {
 				return nil, err

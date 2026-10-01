@@ -1,0 +1,10 @@
+.git
+**/node_modules
+**/dist
+runtime
+.env*
+test-results
+playwright-report
+work
+infra/.terraform
+**/*.tfstate*
