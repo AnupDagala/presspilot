@@ -1,67 +1,108 @@
 name: verify
 on: [push, pull_request]
-permissions: { contents: read }
+permissions:
+  contents: read
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  LIVE_MODEL_ENABLED: "false"
+  LIVE_EVAL_ENABLED: "false"
 jobs:
-  verify:
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
+  checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { fetch-depth: 0, persist-credentials: false }
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with: { node-version: "24.11.0", cache: npm }
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           {
             go-version-file: apps/api/go.mod,
             cache-dependency-path: apps/api/go.sum,
           }
       - run: npm ci
-      - name: Redacted source-history secret scan
-        run: go install github.com/zricethezav/gitleaks/v8@v8.30.1 && "$(go env GOPATH)/bin/gitleaks" git --redact --no-banner
-      - run: npm run build && npm run typecheck && npm run lint && npm test && npm run scan && npm audit --audit-level=high
-      - run: node scripts/init-dev.mjs && docker compose config --quiet && docker compose up -d --build
-      - name: Wait for actual API
-        run: for i in $(seq 1 60); do curl --fail http://localhost:8080/healthz && exit 0; sleep 2; done; exit 1
-      - name: PostgreSQL invariant tests
+      - name: Publication hygiene and redacted full-history scan
+        run: |
+          npm run publication:check
+          go install github.com/zricethezav/gitleaks/v8@v8.30.1
+          "$(go env GOPATH)/bin/gitleaks" git --redact --no-banner
+      - name: Formatting, lint, types, builds and offline contracts
+        run: npm run format:check && npm run lint && npm run typecheck && npm run build && npm test && npm run config:check && npm run scan
+      - name: Go formatting, build and vet
         working-directory: apps/api
-        run: go test -v ./... && go vet ./... && go run golang.org/x/vuln/cmd/govulncheck@v1.8.0 ./...
-        env:
-          { TEST_DATABASE_URL_FILE: "../../runtime/secrets/test-database-url" }
-      - name: Real PostgreSQL and Temporal evaluations
-        run: npm run eval
-        env:
-          {
-            WORKER_SECRET_FILE: "runtime/secrets/worker-secret",
-            TEST_DATABASE_URL_FILE: "runtime/secrets/test-database-url",
-          }
-      - name: Mocked provider and private fixture evaluations
-        run: npm run eval
-        env:
-          {
-            EVAL_MODE: mocked,
-            EVAL_PRIVATE_FIXTURES: "true",
-            WORKER_SECRET_FILE: "runtime/secrets/worker-secret",
-            TEST_DATABASE_URL_FILE: "runtime/secrets/test-database-url",
-          }
-      - name: Worker process crash recovery
-        run: npx tsx tests/recovery-process.ts
-        env:
-          {
-            WORKER_SECRET_FILE: "runtime/secrets/worker-secret",
-            TEST_DATABASE_URL_FILE: "runtime/secrets/test-database-url",
-          }
-      - run: npx playwright install --with-deps chromium && npm run test:browser
-      - uses: actions/upload-artifact@v4
-        if: always()
+        run: test -z "$(gofmt -l .)" && go build ./... && go vet ./...
+      - name: Dependency vulnerability checks
+        run: npm audit --audit-level=high && cd apps/api && go run golang.org/x/vuln/cmd/govulncheck@v1.8.0 ./...
+  integration:
+    needs: checks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      TEST_DATABASE_URL_FILE: runtime/secrets/test-database-url
+      WORKER_SECRET_FILE: runtime/secrets/worker-secret
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { persist-credentials: false }
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with: { node-version: "24.11.0", cache: npm }
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           {
-            name: verification,
-            path: "evaluations/results-*.json\ntest-results/",
+            go-version-file: apps/api/go.mod,
+            cache-dependency-path: apps/api/go.sum,
           }
+      - run: npm ci && npm run build
+      - name: Provision actual PostgreSQL, Temporal and application containers
+        run: |
+          echo "LOCAL_UID=$(id -u)" >> "$GITHUB_ENV"
+          echo "LOCAL_GID=$(id -g)" >> "$GITHUB_ENV"
+          node scripts/init-dev.mjs
+          LOCAL_UID=$(id -u) LOCAL_GID=$(id -g) docker compose config --quiet
+          LOCAL_UID=$(id -u) LOCAL_GID=$(id -g) docker compose up -d --build
+      - name: Wait for API and web readiness
+        run: |
+          for i in $(seq 1 90); do
+            if curl -fsS http://localhost:8080/healthz && curl -fsS http://localhost:5173/healthz; then exit 0; fi
+            sleep 2
+          done
+          docker compose ps
+          exit 1
+      - name: PostgreSQL domain and security invariants
+        working-directory: apps/api
+        env:
+          { TEST_DATABASE_URL_FILE: "../../runtime/secrets/test-database-url" }
+        run: go test -v ./...
+      - name: Actual PostgreSQL and Temporal baseline evaluations
+        run: npm run eval
+      - name: Mocked provider and private authorization fixtures
+        env: { EVAL_MODE: mocked, EVAL_PRIVATE_FIXTURES: "true" }
+        run: npm run eval
+      - name: Hard worker process recovery in both unpaid modes
+        run: npx tsx tests/recovery-process.ts && RECOVERY_MODE=mocked npx tsx tests/recovery-process.ts
+      - name: Browser workflows against the containerized web gateway
+        run: npx playwright install --with-deps chromium && npm run test:browser
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: synthetic-integration-evidence
+          path: |
+            evaluations/results-*.json
+            evaluations/recovery-process-*.json
+            test-results/
+          retention-days: 7
+      - name: Stop disposable integration services
+        if: always()
+        run: docker compose down
   infrastructure:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: hashicorp/setup-terraform@v3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: { persist-credentials: false }
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
+        with: { terraform_version: "1.16.4" }
       - run: terraform fmt -check && terraform init -backend=false && terraform validate
         working-directory: infra

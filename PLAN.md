@@ -8,3 +8,5 @@
 6. Record measured results, demonstration instructions, source commit, limitations and resume bullets. Complete documentation; final commit identifies this local milestone. No production/customer-use claim.
 
 No paid provisioning, public deployment, or merchant actions are authorized.
+
+Public portfolio publication: verify GitHub account and target, review tracked source/history, strengthen exclusions, present the project as a local alpha, and run container-backed GitHub Actions. Account verified as AnupDagala; no existing presspilot repository or remote. Publication authorized by the user; cloud provisioning and merchant actions remain outside scope. Source/history secret scans passed; final push and CI verification are pending.

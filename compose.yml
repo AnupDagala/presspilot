@@ -27,6 +27,7 @@ services:
     ports: ["127.0.0.1:7233:7233", "127.0.0.1:8233:8233"]
     volumes: ["temporal-infrastructure:/data"]
   api:
+    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
     build: { context: ., dockerfile: apps/api/Dockerfile }
     environment:
       DATABASE_URL_FILE: /run/secrets/database-url
@@ -41,6 +42,7 @@ services:
       temporal: { condition: service_started }
     restart: unless-stopped
   worker:
+    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
     build: { context: ., dockerfile: apps/worker/Dockerfile }
     environment:
       BUSINESS_API: http://api:8080
@@ -51,6 +53,7 @@ services:
     depends_on: [api, temporal]
     restart: unless-stopped
   web:
+    user: "${LOCAL_UID:-1000}:${LOCAL_GID:-1000}"
     build: { context: ., dockerfile: apps/web/Dockerfile }
     environment: { BUSINESS_API: "http://api:8080", PORT: "8080" }
     ports: ["127.0.0.1:5173:8080"]

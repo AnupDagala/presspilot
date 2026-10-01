@@ -16,7 +16,8 @@
     "format:check": "prettier --check apps/worker/src apps/web/src tests docs *.md *.json *.yml",
     "scan": "node scripts/scan.mjs",
     "lint": "eslint apps/worker/src apps/web/src tests scripts apps/web/server.mjs",
-    "config:check": "node scripts/check-config.mjs"
+    "config:check": "node scripts/check-config.mjs",
+    "publication:check": "node scripts/check-publication.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

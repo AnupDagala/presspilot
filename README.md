@@ -1,69 +1,107 @@
 # PressPilot · Saero
 
-PressPilot investigates printing-commerce support exceptions, proposes an evidence-bound action, waits for an authorized person, and verifies the final order transition in PostgreSQL. Developed under **Saero**, an independent software and applied AI studio. This is a functioning portfolio application with fictional data, not a production-proven or customer-deployed service.
+**Local alpha.** PressPilot is a commerce exception-resolution project developed under **Saero**, an independent software and applied AI studio. It investigates support requests for fictional Paper Finch Printworks orders, retrieves authoritative evidence, proposes permitted actions, waits for approval, and verifies business results.
 
-## Local application
+This repository demonstrates implementation and local verification. Live-agent reliability, production deployment, customer adoption, and measured business savings have not been established.
 
-Open **http://localhost:5173** when the local services are running. Start an isolated one-hour demo session. Three seeded orders belong only to that session. Public demo sessions cannot run paid models. Role switching is a labelled sandbox feature and is rejected for private organizations.
+## Workflows and outdated approvals
 
-The verified production web gateway currently runs at **http://localhost:5180** on the implementation machine; the reproducible development setup uses port 5173.
+- Cancel a queued order before production starts.
+- Modify one permitted attribute (`finish` or `customerReference`) before production starts.
+- Investigate requests after production starts and escalate with evidence.
 
-Requirements for the reproducible container path: Docker Compose v2, Node 24.11+, Git. Runtime versions and dependencies are pinned in source and lockfiles.
+**Try the flagship scenario:** submit a cancellation as Operator, inspect the proposal, switch the labelled sandbox role to Administrator and select **Simulate production start**, then approve as Approver. The proposal is invalidated, the workflow retrieves fresh evidence, and the case escalates. The order stays in production. In a fresh sandbox, an unchanged queued-order cancellation executes after approval.
+
+Each proposal binds organization, order identity/version, policy version, exact action/arguments and evidence. Approval has an identity and expiry and applies only to that proposal. The backend revalidates requester/approver authorization, policy and order state immediately before an atomic PostgreSQL transition. Idempotency bindings and unique execution constraints prevent repeated effects. Customer text and model output cannot grant permissions. Requester protections remain enforced during recovery.
+
+Demo sessions are isolated, bounded and expire after one hour. Seeded data and production events are explicitly simulated. Sandbox role switching is denied for private organizations; public sessions cannot make paid model calls. Refunds, shipment changes, artwork analysis and fleet management are outside this alpha.
+
+## Architecture
+
+| Boundary                              | Responsibility                                                                                         |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Go / GraphQL (`apps/api`)             | Tenant isolation, authorization, domain rules, narrow tools, atomic execution, audit and webhook inbox |
+| TypeScript / Temporal (`apps/worker`) | Durable workflows, approval waits, bounded retries, baseline and provider adapters                     |
+| React / TypeScript (`apps/web`)       | Case queue, evidence, approvals, timelines, policies and evaluation reports; Node web gateway          |
+| PostgreSQL                            | Authoritative orders, policies, proposals, approvals, executions and audit                             |
+| Temporal                              | Execution history, timers and recovery; model/network calls occur only in activities                   |
+
+The worker has no database credentials or arbitrary SQL, shell or general network tool. Application PostgreSQL and Temporal infrastructure storage are separate. Read [architecture/data flow](docs/ARCHITECTURE.md), [decision records](docs/adr/001-authoritative-business-boundary.md), [demonstration policy](docs/POLICY.md), and [SECURITY.md / threat model](SECURITY.md).
+
+## Local setup
+
+Run commands from the repository root. Native verification used Node **24.11.0**, Go **1.27.1**, PostgreSQL **18.6**, and Temporal CLI **1.9.1**. Dependencies are pinned in lockfiles. Both setup paths serve the console at **http://localhost:5173** and Temporal UI at **http://localhost:8233**.
+
+### Docker Compose
+
+Requires Docker Engine with Compose v2, Node 24.11+ and Git:
 
 ```sh
 npm ci
 node scripts/init-dev.mjs
+# Linux/macOS: containers must match the owner of private secret files.
+export LOCAL_UID=$(id -u) LOCAL_GID=$(id -g)
 docker compose config --quiet
 docker compose up -d --build
 ```
 
-The secret generator writes private files into ignored `runtime/secrets`; it never prints credential values. PostgreSQL business data and Temporal development-server infrastructure use separate volumes. All published local ports bind loopback. Temporal's local UI is http://localhost:8233. The development server is a real Temporal server with durable SQLite storage; it is not the production Temporal deployment.
+On Windows, omit `export`. The generator preserves existing credentials and writes private files under ignored `runtime/secrets` without printing values. Ports bind loopback. `docker compose down` stops services while retaining volumes; keep the volumes when their state is needed. Temporal's SQLite-backed development server is real and durable, but is not the production deployment.
 
-**Verification on the implementation machine:** Docker was unavailable. The application was built and exercised with portable Go, actual PostgreSQL 18.6, and Temporal CLI 1.9.1 / server 1.32.0. Docker image execution is pending; YAML/isolation validation and container build instructions are provided. See [verification evidence](docs/VERIFICATION.md) for exact results and remaining gaps.
+**Docker execution remains unverified in the recorded local-alpha results:** the implementation machine had no engine. Compose YAML/isolation checks passed. GitHub Actions provisions actual containers to verify this path; consult the corresponding run instead of assuming success from a workflow definition.
 
-For native Windows operation use `scripts/start-local.ps1` with paths to official portable Go, PostgreSQL, Temporal runtimes. Node dependencies are installed by `npm ci`. The script stores state and private service credentials under an ignored runtime directory and starts hidden, loopback-only services. Existing state is preserved. On this machine the downloaded runtimes and state are under the parent workspace's `work` directory.
+### Native Windows
 
-## Demonstrate the safety boundary
+Download the pinned runtimes from official distributions and verify their published checksums. Put the full distributions in ignored `.tools`, exposing `go/bin/go.exe`, `pgsql/bin/pg_ctl.exe`, and `temporal/temporal.exe` below that directory.
 
-1. Start an isolated demo. As Operator, submit `Please cancel my order.` for `PF-1041`.
-2. Inspect the order and policy evidence, versions, proposal hash, and approval expiry.
-3. Switch the labelled demo role to Administrator. Select **Simulate production start**.
-4. Switch to Approver. Select **Approve exact action**.
-5. The timeline shows approval, proposal invalidation, fresh evidence retrieval, and escalation. The order stays in production. No cancellation executes.
-6. In a fresh session, approve an unchanged queued-order cancellation and verify the order becomes cancelled exactly once.
-
-[Full demonstration script](docs/DEMO.md) also covers modification, rejection, policy changes, evaluations, and recovery.
-
-## Verification commands
-
-```sh
-npm run build
-npm run typecheck
-npm run lint
-npm test
-npm run format:check
-npm run config:check
-npm run scan
-npm audit --audit-level=high
+```powershell
+./scripts/start-local.ps1 -RuntimeRoot ./.tools -StateRoot ./runtime/native
+# Stop tracked processes, preserving data and workflow history:
+./scripts/stop-local.ps1 -RuntimeRoot ./.tools -StateRoot ./runtime/native
 ```
 
-Run Go integration tests with `TEST_DATABASE_URL_FILE` pointing to the **host** connection file `runtime/secrets/test-database-url`. From `apps/api`, use `../../runtime/secrets/test-database-url`. Then run `go test -v ./...`, `go vet ./...`, and `govulncheck ./...`. Without a test database, integration tests explicitly skip; skipped tests are not evidence of passing database invariants.
+The startup script installs dependencies, builds the application and starts hidden loopback-only services. It refuses to replace occupied service ports. Native PostgreSQL uses loopback-only trust authentication; Compose uses generated passwords. Neither is a cloud identity configuration. Native verification also exercised the built Node web gateway on a separate loopback port.
 
-Set `WORKER_SECRET_FILE=runtime/secrets/worker-secret` and `TEST_DATABASE_URL_FILE=runtime/secrets/test-database-url`, then run `npm run eval` while the API and worker are up. The harness grades actual PostgreSQL effects and runs real Temporal retry and recovery scenarios. `EVAL_MODE=mocked` runs the synthetic provider workflow separately. `tsx tests/recovery-process.ts` forcibly terminates a separate worker process while approval is pending and verifies recovery without duplicated retrievals or effects. Browser tests require an installed Playwright browser; `PP_BROWSER_CHANNEL=chrome` uses installed Chrome.
+## Modes and configuration
 
-## Boundaries and operating modes
+**Baseline** uses conservative deterministic interpretation and business tools. **Mocked** uses synthetic/recorded fixtures, with no live inference. **Live** runs a bounded tool-using model in a private environment; it is disabled by default and unverified. The console displays configuration and observed usage, never private reasoning.
 
-- `apps/api`: Go, GraphQL, authorization, narrow internal tool gateway, business rules, transactions, audit, outbox reconciliation, webhook ingestion and Shopify read adapter.
-- `apps/worker`: TypeScript, Temporal orchestration, deterministic baseline, synthetic recorded responses, bounded live tool loop, four provider adapters.
-- `apps/web`: React operations console; production Node gateway forwards same-origin authenticated requests to the private API.
-- PostgreSQL owns operational facts. Temporal owns execution history and durable timers. The worker has no database credentials.
+Compose configures database/worker secret files, the Temporal address and sandbox flag. Native setup creates equivalent state under `runtime/native`. [.env.example](.env.example) documents safe defaults without credentials; processes do not load it automatically.
 
-**Baseline** is conservative deterministic interpretation and business tooling. **Mocked** is a recorded/synthetic fixture sequence, not live AI. **Live** uses configured provider/model IDs and is disabled unless explicitly configured in a private environment. No live calls have been verified. The console exposes run configuration and observed usage, never private reasoning.
+Live execution requires a private organization, `SANDBOX_ENABLED=false`, `LIVE_MODEL_ENABLED=true`, explicit `MODEL_PROVIDER`/`MODEL_ID`, server-only credentials and configured spending limits/price assumptions. Endpoints are allowlisted; private addresses and redirects are rejected. OpenAI, Claude, Grok and an approved open-weight inference adapter are implemented and contract-tested. Follow [provider configuration](docs/PROVIDERS.md) and [Shopify integration status](docs/INTEGRATION.md). Keep secrets out of source, command arguments and public reports.
 
-[Provider configuration](docs/PROVIDERS.md), [architecture](docs/ARCHITECTURE.md), [demonstration policy](docs/POLICY.md), [threat model](SECURITY.md), [evaluation specification](evaluations/SPEC.md), [Shopify status](docs/INTEGRATION.md), and [deployment/recovery](docs/RUNBOOK.md) describe the implementation and limits.
+## Actual verification
 
-## Deployment status
+Recorded native checks used actual PostgreSQL and Temporal:
 
-No cloud resources were provisioned and no site was publicly deployed. `infra/` prepares private Cloud Run web/API services, a continuous worker pool, Cloud SQL, Secret Manager references, logging and alerts. The worker uses Temporal Cloud TLS/API-key configuration. The API dispatcher has continuously allocated CPU and a minimum instance; it does not depend on processing surviving an HTTP request. [Google documents worker pools as continuous background runtimes](https://docs.cloud.google.com/run/docs/deploy-worker-pools).
+- **60/60 baseline** and **60/60 mocked** tasks: 40 development / 20 held-out, one trial each. Each suite includes 53 business/security/workflow tasks and seven recorded provider contracts.
+- **18 Go test functions**, three subtests, **12 unit/contract tests**, and **six browser tests** passed.
+- Baseline and mocked worker process-kill/restart checks each produced one order retrieval and one business effect. Private authorization and isolated PostgreSQL dump/restore checks passed.
+- Builds, formatting, linting, type checks, dependency/secret scans, Compose isolation checks and Terraform validation passed locally.
 
-The infrastructure configuration contains secret containers and references only. Populate secret versions separately from protected files. Obtain explicit authorization before applying paid infrastructure or changing public access. [Deployment preparation and costs](docs/RUNBOOK.md) includes migration, backup, restore, rollback, and readiness procedures.
+**The 60/60 baseline and mocked results are not live-model benchmarks.** No paid calls occurred; synthetic responses do not establish live reliability. Baseline p50/p95 was 1,109/12,268 ms; mocked p50/p95 was 1,126/8,103 ms. Measurements include approval polling and other verification on the same host, not load testing.
+
+Supporting evidence: [evaluation methodology](evaluations/SPEC.md), [scenario dataset](evaluations/scenarios.json), [baseline report](evaluations/results-baseline.json), [mocked report](evaluations/results-mocked.json), [verification record](docs/VERIFICATION.md), and [machine-readable results](evaluations/verification.json).
+
+```sh
+npm run format:check
+npm run lint
+npm run typecheck
+npm run build
+npm test
+npm run config:check
+npm run scan
+```
+
+For Compose tests set `TEST_DATABASE_URL_FILE=runtime/secrets/test-database-url` and `WORKER_SECRET_FILE=runtime/secrets/worker-secret`. Run [the evaluation harness](tests/evaluate.ts) with `npm run eval`; use `EVAL_MODE=mocked EVAL_PRIVATE_FIXTURES=true` for mocked private fixtures. From `apps/api`, set the database file path to `../../runtime/secrets/test-database-url` before `go test -v ./...` and `go vet ./...`. Tests explicitly skip without a database; skips do not prove invariants.
+
+Native runners instead use the non-secret URL `postgres://presspilot@127.0.0.1:55432/presspilot?sslmode=disable` in `TEST_DATABASE_URL` and the worker secret file under `runtime/native`. Do not use Compose credentials for the native database. Run [process-crash recovery](tests/recovery-process.ts) with `npx tsx tests/recovery-process.ts`, then with `RECOVERY_MODE=mocked`. Run [browser flows](tests/browser/console.spec.ts) with `npx playwright install chromium` and `npm run test:browser`; `PP_BROWSER_CHANNEL=chrome` uses installed Chrome.
+
+[GitHub Actions](.github/workflows/verify.yml) checks source and provisions actual integration dependencies without provider secrets. Paid tests are absent from push/PR CI; optional bounded live trials require explicit local configuration. No passing badge is included without a verified workflow run.
+
+## Remaining milestones
+
+[Demonstration guide](docs/DEMO.md), [known limitations](docs/LIMITATIONS.md), and [deployment/recovery runbook](docs/RUNBOOK.md) describe the next steps.
+
+Live provider inference, actual Shopify development-store integration, Docker execution in the recorded local results, and cloud deployment remain unverified. Shopify signature/inbox/read/reconciliation contracts are implemented; merchant writes are disabled. Terraform prepares private Cloud Run web/API, a continuous Temporal worker pool, Cloud SQL, Secret Manager references, traces and alerts. No cloud resources or merchant actions were performed.
+
+Next: verify containers in CI; run bounded live trials with approved credentials/budget; verify a Shopify development store; then review cloud deployment, IAM, restore/replay compatibility and alert delivery with explicit authorization. Private identity onboarding, retention cleanup, multi-version worker rollout and tracing across worker/provider activities require further work before operational use.
